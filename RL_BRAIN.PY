@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+#Does not start the NN 
+#Clearly self.velocities are not set up
+
 import rospy
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
@@ -82,7 +85,7 @@ class Server:
     	self.accelerationz = msg.linear_acceleration.z
 
     	self.statevector = [0,2,0,0,0,0,self.roll,self.pitch,self.yawn,self.velocityx,self.velocityy,self.velocityz,self.angularvelocityx,self.angularvelocityy,self.angularvelocityz,self.accelerationx,self.accelerationy,self.accelerationz,0,1,0,-1,0,1,0,-1]
-
+    #maybe call run_NN
 
     def alt_callback(self, msg):
         # "Store" the message received.
@@ -97,5 +100,8 @@ if __name__ == '__main__':
     rospy.Subscriber('/mavros/imu/data', Imu, server.imu_callback)
     rospy.Subscriber('/mavros/global_position/rel_alt', Float64, server.alt_callback)
     rospy.Subscriber('/mavros/global_position/gp_vel', Float64, server.alt_callback)
+
+    #Maybe while true
+    #Maybe create new thread to run the NN infinitely and pass the server by reference 
 
     rospy.spin()

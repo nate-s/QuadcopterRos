@@ -51,14 +51,16 @@ def get_ESC(state):
 # Collects data retrieved by the imu
 def imu_callback(self, data):
     # "Store" message received.
+    # Note that the 1s are just filler placeholders for actual data value
     stateVector = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, data.angular_velocity.x, data.angular_velocity.y,
                    data.angular_velocity.z, data.linear_acceleration.x, data.linear_acceleration.y,
                    data.linear_acceleration.y]
     rospy.loginfo(rospy.get_caller_id() + "\nState:\n [{}]".format(stateVector))
 
 
+    # Calls brain function to get action vector of ESCs
     message = Float64MultiArray
-    message.data = get_ESC()
+    message.data = get_ESC(stateVector)
     rospy.loginfo(rospy.get_caller_id() + "\nAction:\n [{}]".format(message))
     pub.publish(message)
 
